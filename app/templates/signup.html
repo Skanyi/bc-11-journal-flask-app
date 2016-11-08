@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+<p> can you see this</p>
+<form method=post action="">
+<p>Sign Up to Write your first Journal Online</p>
+<ul>
+<h2> FirstName: </h2> {{ form.firstname }}
+<h2> LastName: </h2> {{ form.lastname }}
+<p> <h2> Email: </h2> {{ form.email }}</p>
+<p> <h2> Password: </h2> {{ form.password }} </p>
+<p> <h2> Confirm Password: </h2> {{ form.confirm }}</p>
+<p> <h2> Accept Terms And Conditions: </h2> {{ form.accept_tos }} </p>
+</ul>
+<p><input type=submit value=SignUp>
+
+</form>
+
+{% endblock %}
