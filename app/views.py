@@ -15,7 +15,7 @@ def login():
     if form.validate():
         user = User.query.filter_by(email=form.email.data).first()
         login_user(user, form.remember_me.data)
-        return redirect(url_for('hello'))
+        return redirect(url_for('viewentries'))
     return render_template('login.html', form=form)
 
 def flash_errors(form):
@@ -36,7 +36,7 @@ def signup():
         session.add(user)
         session.commit()
         flash('Thanks for registering')
-        return redirect(url_for('login'))
+        return redirect(url_for('newjournal'))
     else:
         flash_errors(form)
     return render_template('signup.html', form=form)
@@ -91,10 +91,8 @@ def edit(id):
 
 @app.route('/search/', methods=['GET'])
 #@login_required
-'''def search():
-    if request.method == 'POST':
-        return redirect(url_for('index'))
-    return redirect(url_for('search', text=session.query(Journal)))'''
+def search():
+    pass
 
 
         #journal_entry.user_id = current_user.id

@@ -1,123 +1,57 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="wrapper">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand text-uppercase" href="{{ url_for('index') }}">Journal App <span class="label label-success text-capitalize">Free</span></a>
+<input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+<div class="top-content" style="position: relative; z-index: 0; ">
+
+            <!-- Top menu -->
+    		<nav role="navigation" class="navbar navbar-inverse navbar-no-bg">
+				<div class="container">
+					<div class="navbar-header">
+						<button data-target="#top-navbar-1" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a target="_blank" href="https://web.facebook.com/iamgurdeeposahan" class="navbar-brand"><i class="fa fa-bullseye"></i></a>
+					</div>
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div id="top-navbar-1" class="collapse navbar-collapse">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="{{ url_for('login')}}" class="scroll-link">Login</a></li>
+							<li><a href="{{ url_for('signup')}}" class="scroll-link">Sign Up</a></li>
+							<li><a href="{{url_for('login')}}" class="scroll-link">Create</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                    	<div class="col-sm-5 phone wow fadeInLeft animated text-center" style="visibility: visible; animation-name: fadeInLeft;">
+                        	<img style="display: inline;" class="img-responsive iamgurdeeposahan" alt="iamgurdeeposahan" title="iamgurdeeposahan" src="http://www.franklin-christoph.com/uploads/1/0/4/5/10453260/9504719_orig.jpg">
+                        </div>
+                        <div class="col-sm-7 text wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
+                            <h1>Create <strong>Your Journal</strong> <i class="fa fa-bullseye"></i> <br>Get it now!</h1>
+                            <div class="description">
+                            	                             	We are pleased to announce that applications will open on October 1 for our 2017 Emerging Writer Fellowships. Under this project, three emerging writers will be selected for six-month fellowships. Apply by November 1.                        	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                            </div>
+                            <div class="top-big-link">
+		                    	<a href="#" target="_blank" class="btn btn-link-1">Download it</a>
+		                    	<a href="#" target="_blank" class="btn btn-link-2 scroll-link">Learn more</a>
+		                    </div>
+		                    <div class="vendors">
+		                    	<a href="#"><span class="fa fa-apple"></span></a>
+		                    	<a href="#"><span class="fa fa-android"></span></a>
+		                    	<a href="#"><span class="fa fa-windows"></span></a>
+
+		                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navigation">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{ url_for('login') }}">Log In</a></li>
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            </ul>
-        </div>
-      </div>
-    </nav>
-    <header class="header">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-5 col-md-offset-1">
-                <div class="content">
-                  <div class="pull-middle">
-                    <h1 class="page-header">Create your journal.</h1>
-                    <p class="lead">We value your privacy.</p>
-
-                  </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-md-offset-1 text-center mt-100 mb-100">
-                <div class="phone">
-                    <img class="img-responsive img-rounded" src="journal.jpg">
-                </div>
-            </div>
-          </div>
-        </div>
-    </header>
-    <section class="section">
-        <div class="container">
-            <div class="row">
-               <div class="col-md-4 col-md-offset-1 text-center mt-100 mb-100">
-                    <div class="phone">
-                        <img class="img-responsive img-rounded" src="http://placemi.com/djlnr/263x480">
-                    </div>
-                </div>
-                <div class="col-md-5 col-md-offset-1">
-                    <div class="content">
-                        <div class="pull-middle">
-                            <h2 class="h1 page-header">Discover more about features.</h2>
-                            <ul class="media-list">
-                              <li class="media">
-                                <a class="media-left" href="#">
-                                  <span class="glyphicon glyphicon-cloud icon text-success"></span>
-                                </a>
-                                <div class="media-body">
-                                  <h3 class="media-heading">Praesent porttitor urna ut enim.</h3>
-                                  <p>Maecenas vitae ex iaculis, efficitur est eu, fermentum quam.</p>
-                                </div>
-                              </li>
-                              <li class="media">
-                                <a class="media-left" href="#">
-                                  <span class="glyphicon glyphicon-lock icon text-success"></span>
-                                </a>
-                                <div class="media-body">
-                                  <h3 class="media-heading">Cras consequat est et elit.</h3>
-                                  <p>Integer suscipit massa at tellus semper, at aliquam ante bibendum.</p>
-                                </div>
-                              </li>
-                              <li class="media">
-                                <a class="media-left" href="#">
-                                  <span class="glyphicon glyphicon-user icon text-success"></span>
-                                </a>
-                                <div class="media-body">
-                                  <h3 class="media-heading">Aenean vel enim quis dui blandit.</h3>
-                                  <p>Maecenas vitae ex iaculis, efficitur est eu, fermentum quam.</p>
-                                </div>
-                              </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 text-right">
-                    <div class="content">
-                        <div class="pull-middle">
-                            <h4><strong>Describe your product.</strong></h4>
-                            <p>Proin sapien neque, consequat ac tempus aliquam, gravida in urna. Phasellus et lectus in odio imperdiet tempus. Aenean posuere, nunc a tristique imperdiet, massa dolor dictum eros, sit amet tempor turpis turpis vel tortor.</p>
-                            <small>Phasellus feugiat at lorem a tincidunt. Nam hendrerit leo vitae orci pellentesque, nec euismod dolor condimentum.</small>
-                        </div>
-                    </div>
-                </div>
-               <div class="col-md-4 col-md-offset-1 mt-100 mb-100">
-                    <div class="phone">
-                        <img class="img-responsive img-rounded" src="http://placemi.com/djlnr/263x480">
-                    </div>
-                </div>
-                <div class="col-md-3 col-md-offset-1">
-                    <div class="content">
-                        <div class="pull-middle">
-                            <h4><strong>Even more stuff.</strong></h4>
-                            <p>Proin sapien neque, consequat ac tempus aliquam, gravida in urna. Phasellus et lectus in odio imperdiet tempus. Aenean posuere, nunc a tristique imperdiet, massa dolor dictum eros, sit amet tempor turpis turpis vel tortor.</p>
-                            <a class="btn btn-success btn-circle" href="#">Sign up for free</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
 {% endblock %}

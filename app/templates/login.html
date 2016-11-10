@@ -2,23 +2,20 @@
 {% block content %}
 <form method=post action="/login">
   <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
-<p>Log in to Continue</p>
-
-<div id="fullscreen_bg" class="fullscreen_bg"/>
+  <div id="fullscreen_bg" class="fullscreen_bg"/>
 
 <div class="container">
 
     <form class="form-signin">
 		<h1 class="form-signin-heading text-muted">Sign In</h1>
-    <div class="row">
-      {{ form.email.label}}
-		{{ form.email }}
-  </div>
-  <div class="row">
-    {{ form.password.label }}
-		{{ form.password }}
-  </div>
-		<button class="btn btn-lg btn-primary btn-block" type="submit">
+    <!--{{ form.email.label(class_="form-control")}}-->
+    <label>Email</label>
+    {{ form.email(class_="form-control")}}
+    <!--{{ form.password.label(class_="form-control")}}-->
+    <label>Password</label>
+    {{ form.password(class_="form-control")}}
+    </br>
+	     <button class="btn btn-lg btn-primary btn-block" type="submit">
 			Sign In
 		</button>
 	</form>
