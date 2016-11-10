@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block body %}
+<form method=post action="/edit">
+<p>Edit your Journal</p>
+<ul>
+<p> <h2> body: </h2> {{ form.body }} </p>
+<p> <h2> tags: </h2> {{ form.tags }} </p>
+</ul>
+<p><input type=submit value=Login>
+</form>
+{% endblock %}
