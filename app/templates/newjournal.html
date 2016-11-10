@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+<form method=post action="/newjournal">
+<p>Create a new Journal</p>
+<ul>
+<p> <h2> body: </h2> {{ form.pagedown(rows = 20) }} </p>
+<p> <h2> tags: </h2> {{ form.tags }} </p>
+p> <h2> tags: </h2> {{ form.submit }} </p>
+</ul>
+<p><input type=submit value=Create>
+</form>
+{% endblock %}
