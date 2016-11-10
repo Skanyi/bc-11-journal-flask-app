@@ -3,6 +3,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from passlib.hash import sha256_crypt
 from flask_login import LoginManager
 from mod_auth.forms import SignUpForm, LoginForm
+from mod_main.forms import JournalForm, SearchForm
 
 
 app = Flask(__name__) # , template_folder='./app/templates')
@@ -19,7 +20,7 @@ lm.login_view = "users.login"
 def hello():
     return "Hello World!"
 
-@app.route("/login/", methods=['POST', 'GET'])
+@app.route("/login", methods=['POST', 'GET'])
 def login():
     form = LoginForm(request.form)
     if form.validate():
@@ -39,6 +40,18 @@ def signup():
         flash('Thanks for registering')
         return redirect(url_for('login'))
     return render_template('signup.html', form=form)
+
+@app.route("/newjournal", methods=['POST', 'GET'])
+#@login_required
+def newjournal():
+    form = JournalForm(request.form)
+    if request.method == 'POST' and form.validate_on_submit():
+        new = models.Journal(form.body.data, form.tags.data)
+        db.session.add(new)
+        db.session.commit()
+        flash('Your Journal has been Created')
+        return redirect(url_for('viewentries'))
+    return render_template('edit.html', form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
