@@ -1,16 +1,23 @@
 from flask import Flask, request, render_template, flash, session, redirect, url_for
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import sha256_crypt
 from flask_login import LoginManager
 from mod_auth.forms import SignUpForm, LoginForm
 from mod_main.forms import JournalForm, SearchForm
+from mod_auth import forms
+from sqlalchemy import create_engine
+import config
+from sqlalchemy.orm import sessionmaker
 
 
 app = Flask(__name__) # , template_folder='./app/templates')
+app.config.from_object(config)
 db = SQLAlchemy(app) # Initiliazation of database
-app.secret_key = "SDFSDFSDF"
-# Configurations
-#app.config.from_object('config')
+#app.secret_key = "SDFSDFSDF"
+engine = create_engine('sqlite:///journal.db', echo = True) # create a database when called
+Session = sessionmaker(bind=engine)
+session = Session()
+import models
 
 lm = LoginManager()
 lm.init_app(app)
@@ -29,29 +36,48 @@ def login():
         return redirect(url_for('hello'))
     return render_template('login.html', form=form)
 
+def flash_errors(form):
+    """Flashes form errors"""
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'error')
+
 @app.route("/signup", methods=['POST', 'GET'])
 def signup():
     form = SignUpForm(request.form)
     if request.method == 'POST' and form.validate():
         user = models.User(form.firstname.data, form.lastname.data, form.username.data, form.email.data,
                     form.password.data)
-        db.session.add(user)
-        db.session.commit()
+        session.add(user)
+        session.commit()
         flash('Thanks for registering')
         return redirect(url_for('login'))
+    else:
+        flash_errors(form)
     return render_template('signup.html', form=form)
 
 @app.route("/newjournal", methods=['POST', 'GET'])
 #@login_required
 def newjournal():
     form = JournalForm(request.form)
-    if request.method == 'POST' and form.validate_on_submit():
+    print('My steve')
+    if form.validate_on_submit():
+        session = Session()
         new = models.Journal(form.body.data, form.tags.data)
         db.session.add(new)
         db.session.commit()
         flash('Your Journal has been Created')
         return redirect(url_for('viewentries'))
     return render_template('edit.html', form=form)
+
+@app.route("/viewentries", methods=['GET'])
+#@login_required
+def viewentries():
+    entries = models.Journal.query.filter_by(models.User.id == models.Journal.jour_id)
+    return render_template('viewentries.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
