@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+<p> Your Journals </p>
+<ul id = 'journals'>
+  {% for entry in entries %}
+      <li>{{ entry }}</li>
+  {% endfor %}
+    {{ entries }}
+</ul>
+{% endblock %}

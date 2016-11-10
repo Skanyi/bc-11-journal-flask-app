@@ -1,29 +1,8 @@
-from flask import Flask, request, render_template, flash, session, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from passlib.hash import sha256_crypt
-from flask_login import LoginManager
-from mod_auth.forms import SignUpForm, LoginForm
-from mod_main.forms import JournalForm, SearchForm
-from mod_auth import forms
-from sqlalchemy import create_engine
-import config
-from sqlalchemy.orm import sessionmaker
-from flask_wtf.csrf import CsrfProtect
+from app import SignUpForm, LoginForm
+from app import JournalForm, SearchForm
+from .models import Journal, User
+from app import app
 
-app = Flask(__name__) # , template_folder='./app/templates')
-app.config.from_object(config)
-db = SQLAlchemy(app) # Initiliazation of database
-CsrfProtect(app)
-
-engine = create_engine('sqlite:///journal.db', echo = True) # create a database when called
-Session = sessionmaker(bind=engine)
-session = Session()
-# import models
-from models import *
-
-lm = LoginManager()
-lm.init_app(app)
-lm.login_view = "users.login"
 
 @app.route("/")
 def hello():
@@ -51,7 +30,7 @@ def flash_errors(form):
 def signup():
     form = SignUpForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = models.User(form.firstname.data, form.lastname.data, form.username.data, form.email.data,
+        user = User(form.firstname.data, form.lastname.data, form.username.data, form.email.data,
                     form.password.data)
         session.add(user)
         session.commit()
@@ -66,7 +45,7 @@ def signup():
 def newjournal():
     form = JournalForm(request.form)
     if request.method == 'POST' and form.validate():
-        new = models.Journal(form.body.data, form.tags.data)
+        new = Journal(form.body.data, form.tags.data)
         session.add(new)
         session.commit()
         flash('Your Journal has been Created')
@@ -80,6 +59,3 @@ def newjournal():
 def viewentries():
     entries = Journal.query.filter_by(User.id == Journal.jour_id)
     return render_template('viewentries.html')
-
-if __name__ == "__main__":
-    app.run(debug=True)

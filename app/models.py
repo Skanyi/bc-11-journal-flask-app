@@ -1,13 +1,14 @@
 from app import db
+from sqlalchemy import Column, ForeignKey, Integer, DateTime
+from sqlalchemy.orm import relationship
 from passlib.hash import sha256_crypt
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+import datetime
 
-class Base(db.Model):
-    '''Creates a model that all the other table models willinherit
-    '''
-    __abstract__ = True
-    date_created = db.Column(db.DateTime,  default=db.func.current_timestamp().op('AT TIME ZONE')('EAT'))
-    updated_on = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.now().op('AT TIME ZONE')('EAT'))
+engine = create_engine('sqlite:///journal.db', echo = True) # create a database when called
+Base = declarative_base() # Create only one instance of the base
 
 class User(UserMixin, Base):
     '''
@@ -16,6 +17,8 @@ class User(UserMixin, Base):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
+    updated_on = db.Column(db.DateTime)
     firstname = db.Column(db.String(80), nullable=False)
     lastname = db.Column(db.String(80), nullable=False)
     username = db.Column(db.String(50), nullable=False, unique=True)
@@ -59,15 +62,12 @@ class User(UserMixin, Base):
         '''
         self.password = sha256_crypt.encrypt((str(form.password.data)))
 
-    '''
-    Create a relationship between the user table and journal table by username
-    User.username == Journal.username
-    '''
-
 class Tag(Base):
     """ This table model will create a table for tags"""
     __tablename__ = 'tags'
     id = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
+    updated_on = db.Column(db.DateTime)
     tagname = db.Column(db.String(80), primary_key=True )
 
     def __init__(self, tagname):
@@ -84,14 +84,19 @@ class Journal(Base):
     __tablename__ = 'journal'
 
     id = db.Column(db.Integer, primary_key=True)
-    User.username = db.Column(db.String(50), nullable=False, unique=True)
+    date_created = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
+    updated_on = db.Column(db.DateTime)
     body = db.Column(db.String(1500), nullable=False)
     tags = db.Column(db.String(50), nullable=True)
+    jour_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    jour = db.relationship(User)
+        #backref=db.backref('jour', lazy='dynamic'))
 
-    def __init__(self, title, body, tags, user_id):
-        self.title = title
+    def __init__(self, body, tags):
         self.body = body
         self.tags = tags
 
     def __repr__(self):
         return '<Journal %r>' % self.title
+
+Base.metadata.create_all(engine) # Creates the tables using the connection engine

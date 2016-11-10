@@ -1,11 +1,16 @@
 '''
 Create a form that will be used to create journal Entries
 '''
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from flask_wtf import Form
+from flask.ext.pagedown.fields import PageDownField
+from wtforms import BooleanField, StringField, PasswordField, validators, SubmitField
+from wtforms.validators import DataRequired
 
 class JournalForm(Form):
-    body = StringField('firstname', [validators.Length(min=100, max=1500)])
-    tags = StringField('firstname', [validators.Length(min=12, max=20)])
+    body = PageDownField('Body', [validators.Length(min=1, max=1500)])
+    tags = StringField('Tags', [validators.Length(min=1, max=20)])
+    submit = SubmitField("Create")
 
-
-    
+class SearchForm(Form):
+    search = StringField('search', validators=[DataRequired()])
+    submit = SubmitField("Submit")

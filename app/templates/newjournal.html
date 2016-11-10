@@ -1,11 +1,20 @@
 {% extends "base.html" %}
-{% block body %}
+{% block content %}
 <form method=post action="/newjournal">
+  {{ form.hidden_tag() }}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <ulclass=flashes>
+  {% for message in messages %}
+    <li>{{ message }}</li>
+  {% endfor %}
+  </ul>
+{% endif %}
+{% endwith %}
 <p>Create a new Journal</p>
 <ul>
-<p> <h2> body: </h2> {{ form.pagedown(rows = 20) }} </p>
+<p> <h2> body: </h2> {{ form.body(rows = 20) }} </p>
 <p> <h2> tags: </h2> {{ form.tags }} </p>
-p> <h2> tags: </h2> {{ form.submit }} </p>
 </ul>
 <p><input type=submit value=Create>
 </form>

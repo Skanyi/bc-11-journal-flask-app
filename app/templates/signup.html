@@ -1,11 +1,21 @@
 {% extends "base.html" %}
-{% block body %}
+{% block content %}
 <p> can you see this</p>
-<form method=post action="">
+<form method=post action="/signup">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 <p>Sign Up to Write your first Journal Online</p>
 <ul>
 <h2> FirstName: </h2> {{ form.firstname }}
 <h2> LastName: </h2> {{ form.lastname }}
+<p> <h2> Username: </h2> {{ form.username }}</p>
 <p> <h2> Email: </h2> {{ form.email }}</p>
 <p> <h2> Password: </h2> {{ form.password }} </p>
 <p> <h2> Confirm Password: </h2> {{ form.confirm }}</p>
