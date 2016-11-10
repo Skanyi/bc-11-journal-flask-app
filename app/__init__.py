@@ -23,4 +23,4 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = "users.login"
 
-from app import models
+from app import views, models

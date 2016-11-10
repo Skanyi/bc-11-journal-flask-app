@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<p> can you see this</p>
 <form method=post action="/signup">
+  <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
   {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class=flashes>
@@ -11,18 +11,77 @@
     </ul>
   {% endif %}
 {% endwith %}
-<p>Sign Up to Write your first Journal Online</p>
-<ul>
-<h2> FirstName: </h2> {{ form.firstname }}
-<h2> LastName: </h2> {{ form.lastname }}
-<p> <h2> Username: </h2> {{ form.username }}</p>
-<p> <h2> Email: </h2> {{ form.email }}</p>
-<p> <h2> Password: </h2> {{ form.password }} </p>
-<p> <h2> Confirm Password: </h2> {{ form.confirm }}</p>
-<p> <h2> Accept Terms And Conditions: </h2> {{ form.accept_tos }} </p>
-</ul>
-<p><input type=submit value=SignUp>
 
+<div class="container">
+        <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+			    		<h3 class="panel-title">Please sign up to create your journal <small>It's free!</small></h3>
+			 			</div>
+			 			<div class="panel-body">
+			    		<form role="form">
+			    			<div class="row">
+			    				<div class="col-md-12">
+			    					<div class="form-group">
+			                {{ form.firstname.label }}
+                      {{ form.firstname }}
+			    					</div>
+			    				</div>
+                </div>
+                <div class="row">
+			    				<div class="col-md-12">
+			    					<div class="form-group">
+                      {{ form.lastname.label }}
+                      {{ form.lastname }}
+			    					</div>
+			    				</div>
+			    			</div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                <div class="form-group">
+                  {{ form.email.label }}
+                  {{ form.email }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+              <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+            <div class="form-group">
+              {{ form.confirm.label }}
+              {{ form.confirm }}
+            </div>
+          </div>
+        </div>>
+
+			    			<input type="submit" value="SignUp" class="btn btn-info btn-block">
+
+			    		</form>
+			    	</div>
+	    		</div>
+    		</div>
+    	</div>
+    </div>
+
+<p>Sign Up to Write your first Journal Online</p>
 </form>
 
 {% endblock %}

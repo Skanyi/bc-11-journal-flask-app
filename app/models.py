@@ -97,6 +97,6 @@ class Journal(Base):
         self.tags = tags
 
     def __repr__(self):
-        return '<Journal %r>' % self.title
+        return '<Journal %r>' % self.body
 
 Base.metadata.create_all(engine) # Creates the tables using the connection engine

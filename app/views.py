@@ -1,7 +1,8 @@
+from flask import Flask, request, render_template, flash, redirect, url_for
 from app import SignUpForm, LoginForm
 from app import JournalForm, SearchForm
 from .models import Journal, User
-from app import app
+from app import app, session
 
 
 @app.route("/")
@@ -57,5 +58,13 @@ def newjournal():
 @app.route("/viewentries", methods=['GET'])
 #@login_required
 def viewentries():
-    entries = Journal.query.filter_by(User.id == Journal.jour_id)
-    return render_template('viewentries.html')
+    # entries = session.query(Journal).filter(User.id == Journal.jour_id).all()
+    entry_rows = session.query(Journal).all()
+    entries = []
+    for entry in entry_rows:
+        entries.append({
+            "body": entry.body,
+            "tags": entry.tags
+        })
+    # import pdb; pdb.set_trace()
+    return render_template('viewentries.html', entries=entries)

@@ -1,11 +1,29 @@
 {% extends "base.html" %}
-{% block body %}
+{% block content %}
 <form method=post action="/login">
-<p>Log in to Write your first Journal Online</p>
-<ul>
-<p> <h2> Email: </h2> {{ form.email }} </p>
-<p> <h2> Password: </h2> {{ form.password }} </p>
-</ul>
-<p><input type=submit value=Login>
+  <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+<p>Log in to Continue</p>
+
+<div id="fullscreen_bg" class="fullscreen_bg"/>
+
+<div class="container">
+
+    <form class="form-signin">
+		<h1 class="form-signin-heading text-muted">Sign In</h1>
+    <div class="row">
+      {{ form.email.label}}
+		{{ form.email }}
+  </div>
+  <div class="row">
+    {{ form.password.label }}
+		{{ form.password }}
+  </div>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">
+			Sign In
+		</button>
+	</form>
+
+</div>
+
 </form>
 {% endblock %}
