@@ -32,3 +32,7 @@ class JournalForm(Form):
 class SearchForm(Form):
     search = StringField('search', validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+class EditForm(Form):
+    body = PageDownField('Body', [validators.Length(min=1, max=1500)])
+    tags = StringField('Tags', [validators.Length(min=1, max=20)])

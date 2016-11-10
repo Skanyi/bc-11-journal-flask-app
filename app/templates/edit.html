@@ -1,9 +1,20 @@
 {% extends "base.html" %}
-{% block body %}
+{% block content %}
 <form method=post action="/edit">
+  <form method=post action="/newjournal">
+    <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
 <p>Edit your Journal</p>
 <ul>
-<p> <h2> body: </h2> {{ form.body }} </p>
+<p> <h2> body: </h2> {{ form.body(rows = 20) }} </p>
 <p> <h2> tags: </h2> {{ form.tags }} </p>
 </ul>
 <p><input type=submit value=Update>

@@ -1,13 +1,13 @@
 from flask import Flask, request, render_template, flash, redirect, url_for
-from app import SignUpForm, LoginForm
+from app import SignUpForm, LoginForm, EditForm
 from app import JournalForm, SearchForm
 from .models import Journal, User
 from app import app, session
 
 
-@app.route("/")
-def hello():
-    return "Hello World!"
+@app.route("/index")
+def index():
+    return render_template('index.html')
 
 @app.route("/login", methods=['POST', 'GET'])
 def login():
@@ -63,8 +63,38 @@ def viewentries():
     entries = []
     for entry in entry_rows:
         entries.append({
+            "id": entry.id,
             "body": entry.body,
             "tags": entry.tags
         })
     # import pdb; pdb.set_trace()
     return render_template('viewentries.html', entries=entries)
+@app.route("/edit/<id>", methods=['GET', 'POST'])
+#@login_required
+def edit(id):
+    # Get the journal ID from the GET Requests
+    # Display a form with the necessary fields i.e. body & tags
+    # User submits the form then you get the new values
+    # Update the database table where the entry ID is equal to <id>
+    journal = session.query(Journal).first()
+    form = EditForm(obj= journal)
+    if request.method == 'POST':
+        journal.body = form.body.data
+        journal.tags = form.tags.data
+        session.add(journal)
+        session.commit()
+        flash('Your Journal has been edited')
+        return redirect(url_for('viewentries'))
+    else:
+        flash_errors(form)
+    return render_template('edit.html', form=form)
+
+@app.route('/search/', methods=['GET'])
+#@login_required
+'''def search():
+    if request.method == 'POST':
+        return redirect(url_for('index'))
+    return redirect(url_for('search', text=session.query(Journal)))'''
+
+
+        #journal_entry.user_id = current_user.id

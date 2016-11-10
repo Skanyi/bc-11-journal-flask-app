@@ -4,7 +4,7 @@
   <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <ulclass=flashes>
+  <ul class=flashes>
   {% for message in messages %}
     <li>{{ message }}</li>
   {% endfor %}

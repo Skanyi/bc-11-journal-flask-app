@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, flash, session, redirect, url
 from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import sha256_crypt
 from flask_login import LoginManager
-from app.forms import SignUpForm, LoginForm
+from app.forms import SignUpForm, LoginForm, EditForm
 from app.forms import JournalForm, SearchForm
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
