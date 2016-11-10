@@ -8,16 +8,18 @@ from mod_auth import forms
 from sqlalchemy import create_engine
 import config
 from sqlalchemy.orm import sessionmaker
-
+from flask_wtf.csrf import CsrfProtect
 
 app = Flask(__name__) # , template_folder='./app/templates')
 app.config.from_object(config)
 db = SQLAlchemy(app) # Initiliazation of database
-#app.secret_key = "SDFSDFSDF"
+CsrfProtect(app)
+
 engine = create_engine('sqlite:///journal.db', echo = True) # create a database when called
 Session = sessionmaker(bind=engine)
 session = Session()
-import models
+# import models
+from models import *
 
 lm = LoginManager()
 lm.init_app(app)
@@ -63,20 +65,20 @@ def signup():
 #@login_required
 def newjournal():
     form = JournalForm(request.form)
-    print('My steve')
-    if form.validate_on_submit():
-        session = Session()
+    if request.method == 'POST' and form.validate():
         new = models.Journal(form.body.data, form.tags.data)
-        db.session.add(new)
-        db.session.commit()
+        session.add(new)
+        session.commit()
         flash('Your Journal has been Created')
-        return redirect(url_for('viewentries'))
-    return render_template('edit.html', form=form)
+        return redirect(url_for('hello'))
+    else:
+        flash_errors(form)
+    return render_template('newjournal.html', form = form)
 
 @app.route("/viewentries", methods=['GET'])
 #@login_required
 def viewentries():
-    entries = models.Journal.query.filter_by(models.User.id == models.Journal.jour_id)
+    entries = Journal.query.filter_by(User.id == Journal.jour_id)
     return render_template('viewentries.html')
 
 if __name__ == "__main__":
