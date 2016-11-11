@@ -65,20 +65,6 @@ class User(UserMixin, Base):
         self.pw_hash = generate_password_hash(password)
 
 
-class Tag(Base):
-    """ This table model will create a table for tags"""
-    __tablename__ = 'tags'
-    id = db.Column(db.Integer)
-    date_created = db.Column(db.DateTime, nullable = False, default=datetime.datetime.utcnow)
-    updated_on = db.Column(db.DateTime)
-    tagname = db.Column(db.String(80), primary_key=True )
-
-    def __init__(self, tagname):
-        self.tagname = tagname
-
-    def __repr__(self):
-        return '<Tag %r>' % self.tagname
-
 class Journal(Base):
     '''
     Creates a table model that will store all the journals of the users grouped by username
