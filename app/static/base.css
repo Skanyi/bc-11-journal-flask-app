@@ -1,5 +1,5 @@
 .signature {
-  text-align: right;
+  text-align: center;
   color: white;
 }
 
@@ -13,4 +13,12 @@
 .custab:hover{
     box-shadow: 3px 3px 0px transparent;
     transition: 0.5s;
+    }
+
+    .require {
+        color: #666;
+    }
+    label small {
+        color: #999;
+        font-weight: normal;
     }

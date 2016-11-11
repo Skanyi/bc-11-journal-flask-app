@@ -23,9 +23,9 @@
 
     		    <div class="form-group">
     		        <label for="Journal">Description</label>
-    		        <textarea rows="5" class="form-control" name="{{ form.body}}" ></textarea>
+    		        {{ form.body(class_="form-group")}}
                 <label for="Tags" >Tags</label>
-    		        <textarea rows="2" class="form-control" name="{{ form.tags }}" ></textarea>
+    		        {{ form.tags(class_="form-group")}}
     		    </div>
 
     		    <div class="form-group">

@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template, flash, redirect, url_for
 from flask_login import (LoginManager, login_required, login_user,
                          current_user, logout_user, UserMixin)
+from functools import wraps
+from flask import g, request, redirect, url_for
 from app import SignUpForm, LoginForm, EditForm
 from app import JournalForm, SearchForm
 from .models import Journal, User
@@ -11,19 +13,21 @@ from app import app, session,lm
 def user_loader(user_id):
     return session.query(User).get(user_id)
 
+@app.before_request
+def before_request():
+    g.user = current_user
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route("/index")
 def index():
     return render_template('index.html')
-
-@app.route("/login", methods=['POST', 'GET'])
-def login():
-    form = LoginForm(request.form)
-    if form.validate():
-        user = session.query(User).filter_by(email=form.email.data).first()
-        if form.email.data == user.form.data:
-            return redirect(url_for('viewentries'))
-    return render_template('login.html', form=form)
 
 def flash_errors(form):
     """Flashes form errors"""
@@ -34,6 +38,18 @@ def flash_errors(form):
                 error
             ), 'error')
 
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    error = None
+    form = LoginForm(request.form)
+    if form.validate():
+        user = session.query(User).filter_by(email=form.email.data).first()
+        if form.email.data == form.email.data:
+            return redirect(url_for('viewentries'))
+    else:
+        flash_errors(form)
+    return render_template('login.html', form=form)
+
 @app.route("/signup", methods=['POST', 'GET'])
 def signup():
     form = SignUpForm(request.form)
@@ -42,7 +58,7 @@ def signup():
                     form.password.data)
         session.add(user)
         session.commit()
-        flash('Thanks for registering')
+        flash('Thanks for registering, Create you first Journal')
         return redirect(url_for('newjournal'))
     else:
         flash_errors(form)
@@ -57,13 +73,13 @@ def newjournal():
         session.add(new)
         session.commit()
         flash('Your Journal has been Created')
-        return redirect(url_for('hello'))
+        return redirect(url_for('viewentries'))
     else:
         flash_errors(form)
     return render_template('newjournal.html', form = form)
 
 @app.route("/viewentries", methods=['GET'])
-#@login_required
+@login_required
 def viewentries():
     # entries = session.query(Journal).filter(User.id == Journal.jour_id).all()
     entry_rows = session.query(Journal).all()
@@ -77,7 +93,7 @@ def viewentries():
     # import pdb; pdb.set_trace()
     return render_template('viewentries.html', entries=entries)
 @app.route("/edit/<id>", methods=['GET', 'POST'])
-#@login_required
+@login_required
 def edit(id):
     # Get the journal ID from the GET Requests
     # Display a form with the necessary fields i.e. body & tags
@@ -97,9 +113,6 @@ def edit(id):
     return render_template('edit.html', form=form)
 
 @app.route('/search/', methods=['GET'])
-#@login_required
+@login_required
 def search():
     pass
-
-
-        #journal_entry.user_id = current_user.id

@@ -10,14 +10,13 @@ from flask_wtf.csrf import CsrfProtect
 
 app = Flask(__name__) # , template_folder='./app/templates')
 app.config.from_object('config')
+
 db = SQLAlchemy(app) # Initiliazation of database
 CsrfProtect(app)
 
 engine = create_engine('sqlite:///journal.db', echo = True) # create a database when called
 Session = sessionmaker(bind=engine)
 session = Session()
-# import models
-
 
 lm = LoginManager()
 lm.init_app(app)
