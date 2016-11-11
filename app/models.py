@@ -78,8 +78,8 @@ class Journal(Base):
     body = db.Column(db.String(1500), nullable=False)
     tags = db.Column(db.String(50), nullable=True)
     jour_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    jour = db.relationship(User)
-        #backref=db.backref('jour', lazy='dynamic'))
+    jour = db.relationship(User,
+        backref=db.backref('jour', lazy='dynamic'))
 
     def __init__(self, body, tags):
         self.body = body
