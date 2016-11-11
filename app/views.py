@@ -1,8 +1,15 @@
 from flask import Flask, request, render_template, flash, redirect, url_for
+from flask_login import (LoginManager, login_required, login_user,
+                         current_user, logout_user, UserMixin)
 from app import SignUpForm, LoginForm, EditForm
 from app import JournalForm, SearchForm
 from .models import Journal, User
-from app import app, session
+from app import app, session,lm
+
+
+@lm.user_loader
+def user_loader(user_id):
+    return session.query(User).get(user_id)
 
 
 @app.route("/index")
@@ -13,9 +20,9 @@ def index():
 def login():
     form = LoginForm(request.form)
     if form.validate():
-        user = User.query.filter_by(email=form.email.data).first()
-        login_user(user, form.remember_me.data)
-        return redirect(url_for('viewentries'))
+        user = session.query(User).filter_by(email=form.email.data).first()
+        if form.email.data == user.form.data:
+            return redirect(url_for('viewentries'))
     return render_template('login.html', form=form)
 
 def flash_errors(form):

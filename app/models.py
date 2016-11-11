@@ -1,5 +1,7 @@
 from app import db
 from sqlalchemy import Column, ForeignKey, Integer, DateTime
+from werkzeug.security import generate_password_hash, \
+     check_password_hash
 from sqlalchemy.orm import relationship
 from passlib.hash import sha256_crypt
 from flask_login import UserMixin
@@ -56,11 +58,12 @@ class User(UserMixin, Base):
     def __repr__(self):
         return '<User %r>' % self.username
 
-    def set_password(self):
+    def set_password(self, password):
         '''
-        Genereates a password using passlib
+        hashing the password
         '''
-        self.password = sha256_crypt.encrypt((str(form.password.data)))
+        self.pw_hash = generate_password_hash(password)
+
 
 class Tag(Base):
     """ This table model will create a table for tags"""

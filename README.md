@@ -25,7 +25,7 @@ You may install the app on your local machine. You should have a working install
 3. Run the server python app.py
 
 # Workflow
-The user can create an account and create journal
+The user can create and account and create journals
 
 # Icebox
 The feature that I did not manage to implement
