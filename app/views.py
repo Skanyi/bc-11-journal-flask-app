@@ -38,8 +38,12 @@ def flash_errors(form):
                 error
             ), 'error')
 
+
 @app.route("/login", methods=['POST', 'GET'])
 def login():
+    '''Authenticate if the user info is correct and then log the user in or redirect
+    or redirect them to the sign up pagedown
+    '''
     error = None
     form = LoginForm(request.form)
     if form.validate():
@@ -48,10 +52,26 @@ def login():
             return redirect(url_for('viewentries'))
     else:
         flash_errors(form)
-    return render_template('login.html', form=form)
+    return render_template('signup.html', form=form)
+
+
+@app.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    """Logout the current user."""
+    user = current_user
+    user.authenticated = False
+    session.add(user)
+    session.commit()
+    logout_user()
+    return render_template("index.html")
+
 
 @app.route("/signup", methods=['POST', 'GET'])
 def signup():
+    '''
+    Register a new user and add the data to the database
+    '''
     form = SignUpForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(form.firstname.data, form.lastname.data, form.username.data, form.email.data,
@@ -64,9 +84,13 @@ def signup():
         flash_errors(form)
     return render_template('signup.html', form=form)
 
+
 @app.route("/newjournal", methods=['POST', 'GET'])
 #@login_required
 def newjournal():
+    '''
+    Creates a new journal that has only tags and tags
+    '''
     form = JournalForm(request.form)
     if request.method == 'POST' and form.validate():
         new = Journal(form.body.data, form.tags.data)
@@ -81,7 +105,9 @@ def newjournal():
 @app.route("/viewentries", methods=['GET'])
 @login_required
 def viewentries():
-    # entries = session.query(Journal).filter(User.id == Journal.jour_id).all()
+    '''
+    Return all the list of journals created by the user
+    '''
     entry_rows = session.query(Journal).all()
     entries = []
     for entry in entry_rows:
