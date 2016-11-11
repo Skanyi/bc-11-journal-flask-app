@@ -30,3 +30,4 @@ The user can create and account and create journals
 # Icebox
 The feature that I did not manage to implement
 * The Search method by keyword or tags
+* The update method is appending new entry instead
