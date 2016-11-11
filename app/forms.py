@@ -13,10 +13,10 @@ class LoginForm(Form):
 
 
 class SignUpForm(Form):
-    firstname = StringField('firstname', [validators.Length(min=4, max=20)])
-    lastname = StringField('lastname', [validators.Length(min=4, max=20)])
-    username = StringField('Username', [validators.Length(min=4, max=25)])
-    email = StringField('Email Address', [validators.Length(min=6, max=35)])
+    firstname = StringField('firstname', [validators.Length(min=2, max=20)])
+    lastname = StringField('lastname', [validators.Length(min=2, max=20)])
+    username = StringField('Username', [validators.Length(min=2, max=25)])
+    email = StringField('Email Address', [validators.Length(min=2, max=35)])
     password = PasswordField('New Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')

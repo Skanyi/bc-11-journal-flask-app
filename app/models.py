@@ -77,13 +77,15 @@ class Journal(Base):
     updated_on = db.Column(db.DateTime)
     body = db.Column(db.String(1500), nullable=False)
     tags = db.Column(db.String(50), nullable=True)
-    jour_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    jour = db.relationship(User,
-        backref=db.backref('jour', lazy='dynamic'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    jour = db.relationship('User')
 
-    def __init__(self, body, tags):
+
+    def __init__(self, body, tags, user_id):
         self.body = body
         self.tags = tags
+        self.user_id = user_id
+
 
     def __repr__(self):
         return '<Journal %r>' % self.body

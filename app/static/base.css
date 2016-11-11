@@ -1,3 +1,8 @@
+body {
+  width: 150px;
+  height: 100px;
+}
+
 .signature {
   text-align: center;
   color: white;

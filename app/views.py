@@ -8,6 +8,7 @@ from app import JournalForm, SearchForm
 from .models import Journal, User
 from app import app, session,lm
 
+current_user_id = -1
 
 @lm.user_loader
 def user_loader(user_id):
@@ -25,7 +26,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route("/index")
+@app.route("/")
 def index():
     return render_template('index.html')
 
@@ -48,6 +49,8 @@ def login():
     form = LoginForm(request.form)
     if form.validate():
         user = session.query(User).filter_by(email=form.email.data).first()
+        global current_user_id
+        current_user_id = user.id
         if form.email.data == form.email.data:
             return redirect(url_for('viewentries'))
     else:
@@ -62,8 +65,8 @@ def logout():
     """Logout the current user."""
     user = current_user
     user.authenticated = False
-    session.add(user)
-    session.commit()
+    #session.add(user)
+    #session.commit()
     logout_user()
     return render_template("index.html")
 
@@ -80,36 +83,43 @@ def signup():
         session.add(user)
         session.commit()
         flash('Thanks for registering, Create you first Journal')
-        return redirect(url_for('newjournal'))
+        return redirect(url_for('login'))
     else:
         flash_errors(form)
     return render_template('signup.html', form=form)
 
 
 @app.route("/newjournal", methods=['POST', 'GET'])
-#@login_required
+@login_required
 def newjournal():
     '''
     Creates a new journal that has only tags and tags
     '''
     form = JournalForm(request.form)
     if request.method == 'POST' and form.validate():
-        new = Journal(form.body.data, form.tags.data)
+        new = Journal(form.body.data, form.tags.data, current_user_id)
+        print ("User id: "+ str(current_user_id))
         session.add(new)
         session.commit()
         flash('Your Journal has been Created')
-        return redirect(url_for('viewentries'))
+        return redirect("viewentries/")
     else:
         flash_errors(form)
     return render_template('newjournal.html', form = form)
 
-@app.route("/viewentries", methods=['GET'])
+@app.route("/viewentries/<id>", methods=['GET'])
+@app.route("/viewentries/", methods=['GET'])
 @login_required
-def viewentries():
+def viewentries(id=None):
     '''
     Return all the list of journals created by the user
     '''
-    entry_rows = session.query(Journal).all()
+
+    entry_rows = None
+    if id is not None:
+        entry_rows = session.query(Journal).filter(Journal.id==id)
+    else:
+        entry_rows = session.query(Journal).filter_by(user_id=current_user_id)
     entries = []
     for entry in entry_rows:
         entries.append({
@@ -128,13 +138,13 @@ def edit(id):
     # Update the database table where the entry ID is equal to <id>
     journal = session.query(Journal).first()
     form = EditForm(obj= journal)
-    if request.method == 'POST':
+    if request.method == 'POST' and id == id:
         journal.body = form.body.data
         journal.tags = form.tags.data
-        session.add(journal)
+        session.populate(journal)
         session.commit()
         flash('Your Journal has been edited')
-        return redirect(url_for('viewentries'))
+        return redirect(url_for('viewentries', Journal.id == id))
     else:
         flash_errors(form)
     return render_template('edit.html', form=form)
