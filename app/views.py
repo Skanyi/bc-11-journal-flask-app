@@ -52,7 +52,8 @@ def login():
             return redirect(url_for('viewentries'))
     else:
         flash_errors(form)
-    return render_template('signup.html', form=form)
+        print("If you have no account, sign up")
+    return render_template('login.html', form=form)
 
 
 @app.route("/logout", methods=["GET"])
