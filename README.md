@@ -1,4 +1,4 @@
-# Introduction
+# Introduction [![Build Status](https://travis-ci.org/pythonGeek/bc-11-journal-flask-app.svg?branch=master)](https://travis-ci.org/pythonGeek/bc-11-journal-flask-app)
 
 * **JournalKeeper** is a Flask Powered Journal Creating App.
 * It has the following features;
