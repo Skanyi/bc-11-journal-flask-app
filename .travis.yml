@@ -9,7 +9,10 @@ python:
   - "nightly" # currently points to 3.7-dev
 # command to install dependencies
 install: "pip install -r requirements.txt"
+         "pip install Flask"
 env:
+  - ENV_VAR=env_variable1
+  - ENV_VAR2=env_variable2
   
 # command to run tests
 script:
